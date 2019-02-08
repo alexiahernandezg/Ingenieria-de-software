@@ -46,5 +46,7 @@ Contributor(s):
     <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/mapita</property>
     <property name="hibernate.connection.username">alexia</property>
     <property name="hibernate.connection.password">tkdajb1516cullen</property>
+    <mapping resource="mapitaModelo/Marcador.hbm.xml"/>
+    <mapping resource="mapitaModelo/Usuario.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>
