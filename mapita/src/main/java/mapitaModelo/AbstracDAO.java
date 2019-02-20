@@ -17,6 +17,7 @@ import org.hibernate.Transaction;
  * @author alex22
  */
 public abstract class AbstracDAO<T> {
+    
     protected SessionFactory sessionFactory;
     
     public AbstracDAO(){
@@ -30,44 +31,72 @@ public abstract class AbstracDAO<T> {
             tx = session.beginTransaction();
             session.save(obj);
             tx.commit();
-        }catch(HibernateException ex){
-            if(tx != null){
-            tx.rollback();
+        }catch(HibernateException e){
+            if(tx!=null){
+                tx.rollback();
             }
-            ex.printStackTrace();
+            e.printStackTrace();
         }finally{
             session.close();
-        }   
-    }
-    
-    protected void delete(){
+        }
     
     }
     
-    protected void update(){
-    
-    }
-    
-    protected T find(Class clazz, int id){
-        T obj = null;
+    protected void update(T obj){
         Session session = this.sessionFactory.openSession();
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
-            obj = (T)session.get(clazz,id);
+            session.update(obj);
             tx.commit();
-        }catch(HibernateException ex){
+        }catch(HibernateException e){
             if(tx!=null){
-            tx.rollback();
-        }
+                tx.rollback();
+            }
+            e.printStackTrace();
         }finally{
             session.close();
+        }
+    }
+    
+    protected void delete(T obj){
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            session.delete(obj);
+            tx.commit();
+        }catch(HibernateException e){
+            if(tx!=null){
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }finally{
+            session.close();
+        }
+    }
+  
+    protected T find(Class clazz, int id){
+        T obj =null;
+        Session session = this.sessionFactory.getCurrentSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            obj =(T)session.get(clazz, id);
+            tx.commit();
+            
+        }catch(HibernateException e){
+            if(tx!=null){
+                tx.rollback();
+            }
+        }finally{
+            session.close();      
         }
         return obj;
     }
     
     protected List<T> findAll(Class clazz){
-        List<T> obj = null;
+        List<T> obj =null;
         Session session = this.sessionFactory.getCurrentSession();
         Transaction tx = null;
         try{
@@ -75,11 +104,11 @@ public abstract class AbstracDAO<T> {
             String hql = "From"+clazz;
             Query query = session.createQuery(hql);
             obj = (List<T>)query.list();
-            tx.commit();
-        }catch(HibernateException ex){
+            tx.commit();        
+        }catch(HibernateException e){
             if(tx!=null){
-            tx.rollback();
-        }
+                tx.rollback();
+            }
         }finally{
             session.close();
         }

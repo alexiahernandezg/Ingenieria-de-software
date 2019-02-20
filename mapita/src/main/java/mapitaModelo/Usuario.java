@@ -81,6 +81,10 @@ public class Usuario  implements java.io.Serializable {
     public void setMarcadors(Set marcadors) {
         this.marcadors = marcadors;
     }
+    public void setFecha(Date fecha) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
 
 
